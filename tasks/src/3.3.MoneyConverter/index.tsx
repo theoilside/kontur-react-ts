@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDom from 'react-dom';
 import './styles.css';
+import {number} from "prop-types";
 
 /**
     Допиши конвертер валют.
@@ -11,15 +12,25 @@ import './styles.css';
 const RUBLES_IN_ONE_EURO = 70;
 
 const MoneyConverter: React.FC = () => {
+  const [rubles, setRubles] = useState(0);
+  const [euros, setEuros] = useState(0);
+  const updateRublesValue = (newRubles: number) => {
+    setRubles(newRubles);
+    setEuros(newRubles / RUBLES_IN_ONE_EURO);
+  };
+  const updateEurosValue = (newEuros: number) => {
+    setRubles(newEuros * RUBLES_IN_ONE_EURO);
+    setEuros(newEuros);
+  };
   return (
     <div className="root">
       <div className="form">
         <h2>Конвертер валют</h2>
         <div>
           <span>&#8381;</span>
-          <Money />
+          <Money value={rubles} setValue={updateRublesValue}/>
           &mdash;
-          <Money />
+          <Money value={euros} setValue={updateEurosValue}/>
           <span>&euro;</span>
         </div>
       </div>
@@ -27,11 +38,12 @@ const MoneyConverter: React.FC = () => {
   );
 };
 
-type MoneyProps = {};
+type MoneyProps = {
+  value: number;
+  setValue: (value: number) => void;
+};
 
-const Money: React.FC<MoneyProps> = () => {
-  const [value, setValue] = useState(0);
-
+const Money: React.FC<MoneyProps> = ({ value, setValue }) => {
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = extractNumberString(event.target.value);
     setValue(value);

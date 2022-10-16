@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDom from 'react-dom';
 import './styles.css';
 
@@ -30,7 +30,17 @@ const Timer: React.FC = () => {
 
 const TimeDisplay: React.FC = () => {
   const [localTime, setLocalTime] = useState(new Date());
-
+  const clock = useRef<number | null>();
+  useEffect(() => {
+    clock.current = window.setInterval(() => {
+      console.log('tick');
+      setLocalTime(new Date());
+    }, 1000);
+    return () => {
+      console.log('unmount');
+      window.clearInterval(Number(clock.current));
+    };
+  }, []);
   return <div className="time">{localTime.toLocaleTimeString()}</div>;
 };
 
