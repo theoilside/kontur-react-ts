@@ -16,7 +16,6 @@ type ToggleProps = {
 const Toggle: React.FC<ToggleProps> = (props) => {
   const checked = true;
   const handleClick = () => {
-      SetValue()
   };
   return (
     <span className={'container' + (checked ? ' isChecked' : '')} onClick={handleClick}>
